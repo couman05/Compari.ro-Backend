@@ -13,4 +13,20 @@ public class Product {
     private String title;
     private double price;
     private String link;
+
+    public void updateProduct(Product newProduct) {
+        if (newProduct.getSite() != null) {
+            this.site = newProduct.getSite();
+        }
+        if (newProduct.getTitle() != null) {
+            this.title = newProduct.getTitle();
+        }
+        if (newProduct.getPrice() > 0) {
+            this.price = newProduct.getPrice();
+        }
+        if (newProduct.getLink() != null) {
+            this.link = newProduct.getLink();
+        }
+    }
+
 }
