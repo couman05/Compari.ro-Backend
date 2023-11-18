@@ -3,6 +3,8 @@ package com.youtube.jwt.controllerMongo;
 import com.youtube.jwt.daoMongo.ProductDao;
 import com.youtube.jwt.daoMongo.SearchDao;
 import com.youtube.jwt.entityMongo.Product;
+import com.youtube.jwt.service.PriceChangeService;
+import com.youtube.jwt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -24,6 +26,9 @@ public class ProductController {
 
     @Autowired
     private SearchDao searchDao;
+
+    @Autowired
+    private PriceChangeService priceChangeService;
 
     @PreAuthorize("hasRole('Admin')")
     @GetMapping("/getAllProducts")
@@ -50,6 +55,9 @@ public class ProductController {
 
         existingProduct.updateProduct(updatedProduct);
         return productDao.save(existingProduct);
+
+
+
     }
     @GetMapping("/getProductById/{id}")
     public Optional<Product> getProductById(@PathVariable String id)
@@ -63,6 +71,14 @@ public class ProductController {
     {
         productDao.deleteById(id);
     }
+
+
+//    @PreAuthorize("hasRole('User')")
+//    @DeleteMapping("/addToWishlist/{id}")
+//    public Product addToWishlist(@PathVariable String id)
+//    {
+//        return("Added to wishlist");
+//    }
 
 
 }
