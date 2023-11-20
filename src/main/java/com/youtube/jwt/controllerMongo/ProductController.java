@@ -3,7 +3,11 @@ package com.youtube.jwt.controllerMongo;
 import com.youtube.jwt.daoMongo.ProductDao;
 import com.youtube.jwt.daoMongo.SearchDao;
 import com.youtube.jwt.entityMongo.Product;
+import com.youtube.jwt.service.PriceChangeService;
+import com.youtube.jwt.service.UserService;
+import com.youtube.jwt.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +29,19 @@ public class ProductController {
     @Autowired
     private SearchDao searchDao;
 
+
+    @Autowired
+    private PriceChangeService priceChangeService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private WishlistService wishlistService;
+
+
     @GetMapping("/getAllProducts")
-    public List<Product> getAllProducts()
-    {
+    public List<Product> getAllProducts() {
         return productDao.findAll();
     }
 
@@ -35,7 +49,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/getProduct/{text}")
-    public List<Product> search(@PathVariable String text){
+    public List<Product> search(@PathVariable String text) {
         return searchDao.findByText(text);
     }
 
@@ -47,21 +61,30 @@ public class ProductController {
 
         existingProduct.updateProduct(updatedProduct);
         return productDao.save(existingProduct);
+
+
     }
+
     @GetMapping("/getProductById/{id}")
-    public Optional<Product> getProductById(@PathVariable String id)
-    {
+    public Optional<Product> getProductById(@PathVariable String id) {
         return productDao.findById(id);
     }
 
     @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/deleteProduct/{id}")
-    public void deleteProduct(@PathVariable String id)
-    {
+    public void deleteProduct(@PathVariable String id) {
         productDao.deleteById(id);
     }
 
 
+    @PreAuthorize("hasRole('User')")
+    @PostMapping("/addToWishlist/{productId}")
+    public ResponseEntity<String> addToWishlist(@PathVariable String productId)
+    {
+        String userName = userService.getCurrentUsername();
+        wishlistService.addToWishlist(userName, productId);
+        return ResponseEntity.ok("Product added to wishlist successfully.");
+    }
     @GetMapping("/getAllCategories")
     public Set<String> getAllCategories()
     {
@@ -72,10 +95,12 @@ public class ProductController {
                 .collect(Collectors.toSet());
 
         return categories;
+
     }
 
 
-
 }
+
+
 
 
