@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductController {
@@ -25,14 +25,11 @@ public class ProductController {
     @Autowired
     private SearchDao searchDao;
 
-    @PreAuthorize("hasRole('Admin')")
     @GetMapping("/getAllProducts")
     public List<Product> getAllProducts()
     {
         return productDao.findAll();
     }
-
-
 
     // Beggining of search implementation
 
@@ -63,6 +60,20 @@ public class ProductController {
     {
         productDao.deleteById(id);
     }
+
+
+    @GetMapping("/getAllCategories")
+    public Set<String> getAllCategories()
+    {
+        List<Product> products = productDao.findAll();
+
+        Set<String> categories = products.stream()
+                .map(Product::getCategory)
+                .collect(Collectors.toSet());
+
+        return categories;
+    }
+
 
 
 }
