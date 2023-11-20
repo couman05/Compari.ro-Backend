@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
+import java.util.Objects;
+
+
 @Document(collection = "laptops")
 @Data
 public class Product {
@@ -16,9 +19,11 @@ public class Product {
     private String title;
     private double price;
     private String link;
+
     private List<String> image_urls;
     private List<String> reviews;
     private List<String> description;
+
     private List<String> users;
 
     public void updateProduct(Product newProduct) {
@@ -51,5 +56,6 @@ public class Product {
         }
 
     }
+
 
 }
