@@ -39,12 +39,9 @@ public class ProductController {
     @Autowired
     private WishlistService wishlistService;
 
-    
-
 
     @GetMapping("/getAllProducts")
-    public List<Product> getAllProducts()
-    {
+    public List<Product> getAllProducts() {
         return productDao.findAll();
     }
 
@@ -52,7 +49,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/getProduct/{text}")
-    public List<Product> search(@PathVariable String text){
+    public List<Product> search(@PathVariable String text) {
         return searchDao.findByText(text);
     }
 
@@ -66,21 +63,18 @@ public class ProductController {
         return productDao.save(existingProduct);
 
 
-
     }
+
     @GetMapping("/getProductById/{id}")
-    public Optional<Product> getProductById(@PathVariable String id)
-    {
+    public Optional<Product> getProductById(@PathVariable String id) {
         return productDao.findById(id);
     }
 
     @PreAuthorize("hasRole('Admin')")
     @DeleteMapping("/deleteProduct/{id}")
-    public void deleteProduct(@PathVariable String id)
-    {
+    public void deleteProduct(@PathVariable String id) {
         productDao.deleteById(id);
     }
-
 
 
     @PreAuthorize("hasRole('User')")
@@ -90,7 +84,7 @@ public class ProductController {
         String userName = userService.getCurrentUsername();
         wishlistService.addToWishlist(userName, productId);
         return ResponseEntity.ok("Product added to wishlist successfully.");
-
+    }
     @GetMapping("/getAllCategories")
     public Set<String> getAllCategories()
     {
@@ -105,7 +99,8 @@ public class ProductController {
     }
 
 
-
 }
+
+
 
 
