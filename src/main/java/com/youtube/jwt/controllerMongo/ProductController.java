@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductController {
@@ -29,6 +29,7 @@ public class ProductController {
     @Autowired
     private SearchDao searchDao;
 
+
     @Autowired
     private PriceChangeService priceChangeService;
 
@@ -38,16 +39,14 @@ public class ProductController {
     @Autowired
     private WishlistService wishlistService;
 
+    
 
 
-    @PreAuthorize("hasRole('Admin')")
     @GetMapping("/getAllProducts")
     public List<Product> getAllProducts()
     {
         return productDao.findAll();
     }
-
-
 
     // Beggining of search implementation
 
@@ -83,6 +82,7 @@ public class ProductController {
     }
 
 
+
     @PreAuthorize("hasRole('User')")
     @PostMapping("/addToWishlist/{productId}")
     public ResponseEntity<String> addToWishlist(@PathVariable String productId)
@@ -90,6 +90,18 @@ public class ProductController {
         String userName = userService.getCurrentUsername();
         wishlistService.addToWishlist(userName, productId);
         return ResponseEntity.ok("Product added to wishlist successfully.");
+
+    @GetMapping("/getAllCategories")
+    public Set<String> getAllCategories()
+    {
+        List<Product> products = productDao.findAll();
+
+        Set<String> categories = products.stream()
+                .map(Product::getCategory)
+                .collect(Collectors.toSet());
+
+        return categories;
+
     }
 
 
