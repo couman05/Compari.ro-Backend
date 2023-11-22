@@ -58,6 +58,17 @@ public class UserService {
         userRoles.add(userRole);
         user.setRole(userRoles);
         userDao.save(user);
+
+        User user2 = new User();
+        user.setUserName("carla");
+        user.setUserPassword(getEncodedPassword("carla"));
+        user.setUserFirstName("carla");
+        user.setEmail("martincarla05@gmail.com");
+        user.setUserLastName("carla");
+        Set<Role> userRoles2 = new HashSet<>();
+        userRoles.add(userRole);
+        user.setRole(userRoles);
+        userDao.save(user);
     }
 
     public User registerNewUser(User user) {
