@@ -97,6 +97,12 @@ public class ProductController {
         return categories;
 
     }
+    @PreAuthorize("hasRole('User')")
+    @GetMapping("/documents/{userId}")
+    public ResponseEntity<List<Product>> getDocumentsForUser(@PathVariable String userId) {
+        List<Product> documents = wishlistService.getDocumentsForUser(userId);
+        return ResponseEntity.ok(documents);
+    }
 
 
 }
