@@ -71,7 +71,7 @@ public class PriceChangeService {
         message.setFrom("johncena.robot@gmail.com");
         message.setTo(email);
         message.setSubject("PRICE CHANGED !! ");
-        message.setText("Hello! Price has dropped for the product: " + product.getTitle() + "!!! Hurry an but it ");
+        message.setText("Hello! Price has dropped for the product: " + product.getTitle() + "!!! Hurry up and buy it from the link: " + product.getLink());
 
         mailSender.send(message);
         System.out.println("Message sent");
@@ -82,18 +82,12 @@ public class PriceChangeService {
     @Scheduled(fixedRate = 6000)
     public void checkPrices()  {
 
-
-
-
             List<Double> oldPrice = getOldPrice();
             List<Double> newPrice = getNewPrice();
             List<Product> products = productDao.findAll();
             List<User> users = (List<User>) userDao.findAll();
             List<String> userEmails = new ArrayList<>();
             String email = null;
-
-
-
 
                 oldPrice = getOldPrice();
                 //System.out.println(oldPrice);
